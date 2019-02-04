@@ -35,8 +35,8 @@ def get_statefulsets(namespace):
     result.append({
       'name': name,
       'alive': desired == current,
-      'desired': desired,
-      'current': current,
+      'desired': int(desired),
+      'current': int(current),
       'age': age
     })
   return result
@@ -73,10 +73,10 @@ def get_deployments(namespace):
     result.append({
       'name': name,
       'alive': desired == current == uptodate == available,
-      'desired': desired,
-      'current': current,
-      'up-to-date': uptodate,
-      'available': available,
+      'desired': int(desired),
+      'current': int(current),
+      'up-to-date': int(uptodate),
+      'available': int(available),
       'age': age
     })
   return result
