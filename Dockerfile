@@ -8,4 +8,4 @@ WORKDIR /app
 ADD requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 ADD . .
-CMD python3 /app/app.py
+CMD gunicorn --bind 0.0.0.0:8080 --workers 8 app:app
