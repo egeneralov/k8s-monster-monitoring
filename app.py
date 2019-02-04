@@ -100,6 +100,11 @@ def get_ns_names():
 app = Flask(__name__)
 
 
+@app.route('/')
+def ok():
+  return "ok"
+
+
 
 @app.route('/namespaces/')
 def get_namespaces():
