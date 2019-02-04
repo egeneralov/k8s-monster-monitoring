@@ -186,6 +186,57 @@ def get_field_in_resource_in_namespace_by_name(namespace, resource, name, field)
   )
 
 
+
+
+
+
+@app.route('/zabbix/namespaces/')
+def zabbix_lld_get_namespaces():
+  result = {"data":[]}
+  for ns in get_ns_names():
+    result['data'].append(
+      {"{#NAMESPACE}": ns}
+    )
+  return jsonify(result)
+
+
+
+@app.route('/zabbix/<namespace>/<resource>/')
+def zabbix_lld_get_resource_in_namespace(namespace, resource):
+  all_resources = {
+    'deployment': get_deployments,
+    'deployments': get_deployments,
+    'statefullset': get_statefulsets,
+    'statefullsets': get_statefulsets
+  }
+  if resource not in all_resources.keys():
+    abort(400)
+
+  action = all_resources[resource]
+  result = {"data":[]}
+  for rs in action(namespace):
+    if rs['alive']:
+      alive = 1
+    else:
+      alive = 0
+    result['data'].append({
+      "{#RESOURCE}": resource,
+      "{#NAME}": rs['name'],
+      "{#ALIVE}": alive,
+      "{#AGE}": rs['age'],
+      "{#AVAILABLE}": rs['available'],
+      "{#CURRENT}": rs['current'],
+      "{#DESIRED}": rs['desired'],
+      "{#UPTODATE}": rs['up-to-date']
+    })
+  return jsonify(result)
+
+
+
+
+
+
+
 if __name__ == '__main__':
   app.run(
     port = os.environ.get('PORT', '8080'),
