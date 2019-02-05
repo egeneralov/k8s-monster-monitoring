@@ -225,20 +225,27 @@ def zabbix_lld_get_resource_in_namespace(namespace, resource):
   action = all_resources[resource]
   result = {"data":[]}
   for rs in action(namespace):
-    result['data'].append({
-      "{#RESOURCE}": resource,
-      "{#NAME}": rs['name'],
-      "{#ALIVE}": rs['alive'],
-      "{#AGE}": rs['age'],
-      "{#AVAILABLE}": rs['available'],
-      "{#CURRENT}": rs['current'],
-      "{#DESIRED}": rs['desired'],
-      "{#UPTODATE}": rs['up-to-date']
-    })
+    try:
+      result['data'].append({
+        "{#RESOURCE}": resource,
+        "{#NAME}": rs['name'],
+        "{#ALIVE}": rs['alive'],
+        "{#AGE}": rs['age'],
+        "{#AVAILABLE}": rs['available'],
+        "{#CURRENT}": rs['current'],
+        "{#DESIRED}": rs['desired'],
+        "{#UPTODATE}": rs['up-to-date']
+      })
+    except:
+      result['data'].append({
+        "{#RESOURCE}": resource,
+        "{#NAME}": rs['name'],
+        "{#ALIVE}": rs['alive'],
+        "{#AGE}": rs['age'],
+        "{#CURRENT}": rs['current'],
+        "{#DESIRED}": rs['desired'],
+      })
   return jsonify(result)
-
-
-
 
 
 
@@ -249,3 +256,4 @@ if __name__ == '__main__':
     host = os.environ.get('BIND', '0.0.0.0'),
     debug = True
   )
+
