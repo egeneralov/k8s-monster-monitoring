@@ -31,10 +31,15 @@ def get_statefulsets(namespace):
       continue
     if name == "NAME" or name == '':
       continue
+    
+    if desired == current:
+      alive = 1
+    else:
+      alive = 0
   
     result.append({
       'name': name,
-      'alive': desired == current,
+      'alive': alive,
       'desired': int(desired),
       'current': int(current),
       'age': age
@@ -70,9 +75,14 @@ def get_deployments(namespace):
     if name == "NAME" or name == '':
       continue
   
+    if desired == current == uptodate == available:
+      alive = 1
+    else:
+      alive = 0
+  
     result.append({
       'name': name,
-      'alive': desired == current == uptodate == available,
+      'alive': alive,
       'desired': int(desired),
       'current': int(current),
       'up-to-date': int(uptodate),
@@ -215,14 +225,10 @@ def zabbix_lld_get_resource_in_namespace(namespace, resource):
   action = all_resources[resource]
   result = {"data":[]}
   for rs in action(namespace):
-    if rs['alive']:
-      alive = 1
-    else:
-      alive = 0
     result['data'].append({
       "{#RESOURCE}": resource,
       "{#NAME}": rs['name'],
-      "{#ALIVE}": alive,
+      "{#ALIVE}": rs['alive'],
       "{#AGE}": rs['age'],
       "{#AVAILABLE}": rs['available'],
       "{#CURRENT}": rs['current'],
