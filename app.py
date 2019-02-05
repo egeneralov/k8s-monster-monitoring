@@ -228,6 +228,7 @@ def zabbix_lld_get_resource_in_namespace(namespace, resource):
     try:
       result['data'].append({
         "{#RESOURCE}": resource,
+        "{#NAMESPACE}": namespace,
         "{#NAME}": rs['name'],
         "{#ALIVE}": rs['alive'],
         "{#AGE}": rs['age'],
@@ -239,6 +240,7 @@ def zabbix_lld_get_resource_in_namespace(namespace, resource):
     except:
       result['data'].append({
         "{#RESOURCE}": resource,
+        "{#NAMESPACE}": namespace,
         "{#NAME}": rs['name'],
         "{#ALIVE}": rs['alive'],
         "{#AGE}": rs['age'],
